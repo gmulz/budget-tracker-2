@@ -1,6 +1,6 @@
 interface LineItem {
     description: string,
-    date: Date,
+    date?: Date,
     amount: number
 }
 

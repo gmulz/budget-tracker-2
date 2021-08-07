@@ -20,7 +20,7 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
             <div>
                 <div>
                     <span className='category-title'>{this.props.category.title} </span>
-                    <span className='category-total'>{this.props.category.total}</span>
+                    <span className='category-total'>${this.props.category.total}</span>
                 </div>
                 {lineItems}
             </div>
