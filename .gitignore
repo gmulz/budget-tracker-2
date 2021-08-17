@@ -102,3 +102,18 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
+
+# Backup files
+*.bak
+
+# Python
+*.py[cod]
+*$py.class
