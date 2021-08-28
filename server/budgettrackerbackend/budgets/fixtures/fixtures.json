@@ -1,0 +1,16 @@
+[
+    {
+        "model": "budgets.category",
+        "pk": 1,
+        "fields": {
+            "description": "Monthly"
+        }
+    },
+    {
+        "model": "budgets.category",
+        "pk": 2,
+        "fields": {
+            "description": "Yearly"
+        }
+    }
+]
