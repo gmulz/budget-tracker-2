@@ -15,6 +15,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all().order_by('description')
     serializer_class = CategorySerializer
     #create a category
+    @action(methods=['post'], detail=False)
+    def create_category(self, request, pk=None):
+        category_dict = request.data
+        new_category = Category(description=category_dict['description'])
+        new_category.save()
+        return Response({'status': 'created category'})
     #delete a category
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -32,18 +38,24 @@ class TransactionViewSet(viewsets.ModelViewSet):
         transactions = Transaction.objects.filter(user=request_user).values()
         return Response(transactions)
     
-    #todo create transaction by user, one at a time
     @action(methods=['post'], detail=False)
     def create_transaction(self, request, pk=None):
-        transaction_obj = request.data
-        new_transaction = Transaction(description=transaction_obj['description'], 
-                    date=transaction_obj['date'],
-                    cost=transaction_obj['cost'],
-                    category_id=transaction_obj['category'],
-                    user_id=transaction_obj['user'])
+        transaction_dict = request.data
+        new_transaction = Transaction(description=transaction_dict['description'], 
+                    date=transaction_dict['date'],
+                    cost=transaction_dict['cost'],
+                    category_id=transaction_dict['category'],
+                    user_id=transaction_dict['user'])
         new_transaction.save()
         return Response({'status': 'created transaction'})
     #edit transaction by id
     #delete a transaction
+
+    @action(methods=['delete'], detail=True)
+    def delete_transaction(self, request, pk=None):
+        transaction = self.get_object()
+        transaction.delete()
+        return Response({'status': 'transaction deleted'})
+
     
 #income per user
