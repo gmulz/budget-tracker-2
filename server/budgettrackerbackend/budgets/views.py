@@ -35,8 +35,17 @@ class TransactionViewSet(viewsets.ModelViewSet):
     @action(methods=['get'], detail=False)
     def transactions_for_user(self, request, pk=None):
         request_user = request.query_params['user']
-        transactions = Transaction.objects.filter(user=request_user).values()
+        start_date = '0001-01-01'
+        end_date = '3100-01-01'
+        if 'start_date' in request.query_params:
+            start_date = request.query_params['start_date']
+        if 'end_date' in request.query_params:
+            end_date = request.query_params['end_date']
+        print(start_date)
+        transactions = Transaction.objects.filter(user=request_user, date__range=[start_date, end_date]).values()
         return Response(transactions)
+    
+    #transactions for user within specific time frame
     
     @action(methods=['post'], detail=False)
     def create_transaction(self, request, pk=None):
