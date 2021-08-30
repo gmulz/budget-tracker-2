@@ -1,8 +1,8 @@
 import React from 'react';
-import LineItem from '../../model/LineItem';
+import Transaction from '../../model/LineItem';
 
 interface LineItemProps {
-    lineItem: LineItem
+    lineItem: Transaction
 }
 
 interface LineItemState {

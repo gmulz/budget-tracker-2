@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import BudgetAPIService from '../../services/apiService';
 import { setUser } from '../../slices/userSlice';
+import { setDateRange } from '../../slices/dateRangeSlice'
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/store';
 import User from '../../model/User';
@@ -15,7 +16,10 @@ interface DataSelectorsState {
 
 interface DataSelectorProps {
     selectedUser: User
-    setUser: (user: User) => void
+    start_date: Date,
+    end_date: Date,
+    setUser: (user: User) => void,
+    setDateRange: (arr: [Date, Date]) => void;
 }
 
 
@@ -51,7 +55,7 @@ class DataSelectors extends React.Component<DataSelectorProps, DataSelectorsStat
     }
 
     onChangeDate(event) {
-
+        this.props.setDateRange(event);
     }
 
     render() {
@@ -66,7 +70,9 @@ class DataSelectors extends React.Component<DataSelectorProps, DataSelectorsStat
                     </select>
                      for date range:
                     <DatePicker onChange={this.onChangeDate.bind(this)}
-                        selectsRange  
+                        selectsRange
+                        startDate={this.props.start_date}
+                        endDate={this.props.end_date}
                     />
                 </form>
             </div>
@@ -76,7 +82,11 @@ class DataSelectors extends React.Component<DataSelectorProps, DataSelectorsStat
 }
 
 const mapStateToProps = (state: RootState, ownProps) => {
-    return { selectedUser: state.user.selectedUser } as DataSelectorProps
+    return { 
+        selectedUser: state.user.selectedUser,
+        start_date: new Date(state.dateRange.start_date),
+        end_date: state.dateRange.end_date ? new Date(state.dateRange.end_date) : null
+    }
 }
 
-export default connect(mapStateToProps, { setUser })(DataSelectors);
+export default connect(mapStateToProps, { setUser, setDateRange })(DataSelectors);

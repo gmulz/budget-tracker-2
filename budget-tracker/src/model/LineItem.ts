@@ -1,7 +1,7 @@
-interface LineItem {
+interface Transaction {
     description: string,
     date?: Date,
     amount: number
 }
 
-export default LineItem;
+export default Transaction;

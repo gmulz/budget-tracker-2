@@ -2,9 +2,9 @@ import React from 'react';
 import './App.css';
 import { CategoryBlotters } from './main-area/blotter-area/CategoryBlotters';
 import Category from './model/Category';
-import LineItem from './model/LineItem';
+import Transaction from './model/LineItem';
 import TopPanel from './top-panel/TopPanel';
-import DateUtils from './utils/DateUtils';
+import { getMonthStartEndFromDate } from './utils/DateUtils';
 
 let categories = [
   {
@@ -15,12 +15,12 @@ let categories = [
         description: "Cafe Vivaldi",
         amount: 50,
         date: new Date('8/2/2021')
-      } as LineItem,
+      } as Transaction,
       {
         description: "Hansens",
         amount: 10,
         date: new Date('8/3/2021')
-      } as LineItem
+      } as Transaction
     ]
   } as Category,
   {
@@ -31,7 +31,7 @@ let categories = [
         description: "Plane tickets",
         amount: 2000,
         date: new Date('8/10/2021')
-      } as LineItem
+      } as Transaction
     ]
   } as Category
 ]
@@ -44,7 +44,7 @@ let monthlies =
       {
         description: "Rent",
         amount: 2050
-      } as LineItem
+      } as Transaction
     ]
   } as Category
 
@@ -59,12 +59,6 @@ interface BudgetState {
 class App extends React.Component<{}, BudgetState> {
   constructor(props: any) {
     super(props);
-    let [start_date, end_date] = DateUtils.getMonthStartEndFromDate(new Date());
-    this.state = {
-      start_date: start_date,
-      end_date: end_date,
-      current_user: undefined
-    }
   }
   
   render() {
