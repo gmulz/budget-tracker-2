@@ -4,6 +4,7 @@ import { CategoryBlotters } from './main-area/blotter-area/CategoryBlotters';
 import Category from './model/Category';
 import LineItem from './model/LineItem';
 import TopPanel from './top-panel/TopPanel';
+import DateUtils from './utils/DateUtils';
 
 let categories = [
   {
@@ -48,16 +49,35 @@ let monthlies =
   } as Category
 
 
-function App() {
-  return (
-    <div>
-      <TopPanel />
+interface BudgetState {
+  current_user?: string,
+  start_date: Date,
+  end_date: Date,
+  
+}
+
+class App extends React.Component<{}, BudgetState> {
+  constructor(props: any) {
+    super(props);
+    let [start_date, end_date] = DateUtils.getMonthStartEndFromDate(new Date());
+    this.state = {
+      start_date: start_date,
+      end_date: end_date,
+      current_user: undefined
+    }
+  }
+  
+  render() {
+    return (
       <div>
-        <CategoryBlotters categories={categories}/>
-        
+        <TopPanel />
+        <div>
+          <CategoryBlotters categories={categories}/>
+          
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default App;
