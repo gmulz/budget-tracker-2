@@ -11,6 +11,6 @@ export const transactions = createSlice({
         addTransaction: (state, action) => {
             state.push(action.payload)
         }
-        
+        //fetch transactions
     }
 })
