@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { CategoryBlotters } from './main-area/blotter-area/CategoryBlotters';
+import CategoryBlotters from './main-area/blotter-area/CategoryBlotters';
 import Category from './model/Category';
 import Transaction from './model/LineItem';
 import TopPanel from './top-panel/TopPanel';
@@ -8,7 +8,7 @@ import { getMonthStartEndFromDate } from './utils/DateUtils';
 
 let categories = [
   {
-    title: 'Food',
+    description: 'Food',
     total: 1234,
     lineItems: [
       {
@@ -24,7 +24,7 @@ let categories = [
     ]
   } as Category,
   {
-    title: "Travel",
+    description: "Travel",
     total: 5000,
     lineItems: [
       {
@@ -38,7 +38,7 @@ let categories = [
 
 let monthlies = 
   {
-    title: "Monthy Expenses",
+    description: "Monthy Expenses",
     total: 300,
     lineItems: [
       {

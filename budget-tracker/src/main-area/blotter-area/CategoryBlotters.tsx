@@ -1,12 +1,19 @@
 import React from 'react';
 import CategoryComponent from '../../components/category/CategoryComponent';
 import Category from '../../model/Category';
+import { connect } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { fetchCategories } from '../../slices/categorySlice';
 
 interface CategoryBlottersProps {
-    categories: Category[]
+    categories: Category[],
+    fetchCategories: () => void
 }
 
-export class CategoryBlotters extends React.Component<CategoryBlottersProps> {
+class CategoryBlotters extends React.Component<CategoryBlottersProps, {}> {
+    async componentDidMount() {
+        this.props.fetchCategories()
+    }
     render() {
         let categories = this.props.categories.map(category => {
             return <CategoryComponent category={category} />
@@ -14,3 +21,11 @@ export class CategoryBlotters extends React.Component<CategoryBlottersProps> {
         return categories;
     }
 }
+
+const mapStateToProps = (state: RootState, ownProps) => {
+    return {
+        categories: state.categories.categories
+    }
+}
+
+export default connect(mapStateToProps, { fetchCategories })(CategoryBlotters)

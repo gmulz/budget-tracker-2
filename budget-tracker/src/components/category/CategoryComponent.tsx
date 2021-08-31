@@ -13,13 +13,14 @@ interface CategoryState {
 class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
 
     render() {
-        let lineItems = this.props.category.lineItems.map(lineItem => {
-            return <LineItemComponent lineItem={lineItem} />
-        });
+        let lineItems = [];
+        // this.props.category.lineItems.map(lineItem => {
+        //     return <LineItemComponent lineItem={lineItem} />
+        // });
         return (
             <div>
                 <div>
-                    <span className='category-title'>{this.props.category.title} </span>
+                    <span className='category-title'>{this.props.category.description} </span>
                     <span className='category-total'>${this.props.category.total}</span>
                 </div>
                 {lineItems}

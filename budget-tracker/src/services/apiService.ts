@@ -7,6 +7,11 @@ class BudgetAPIService {
         return await response.json();
     }
 
+    static async getAllCategories() {
+        let response = await fetch(apiURL + "/categories/");
+        return await response.json();
+    }
+
     static async getTransactionsForUserAndDateRange(user: User, start_date: Date, end_date: Date) {
         let response = await fetch(apiURL + `/transactions/transactions_for_user/?user=${user.id}&start_date=${start_date}&end_date=${end_date}`);
         return await response.json();
