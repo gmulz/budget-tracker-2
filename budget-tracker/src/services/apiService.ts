@@ -4,6 +4,11 @@ import Transaction from "../model/LineItem";
 import { formatDateYearMonthDay, LATE_DATE } from '../utils/DateUtils';
 import { transactions } from "../slices/transactionsSlice";
 
+const POST_INFO = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'}
+}
+
 class BudgetAPIService {
     static async getAllUsers() {
         let response = await fetch(apiURL + "/users/");
@@ -22,7 +27,6 @@ class BudgetAPIService {
         if (end_date != null) {
             endDate = formatDateYearMonthDay(end_date);    
         }
-        console.log(endDate);
 
         let response = await fetch(apiURL + `/transactions/transactions_for_user/?user=${userId}&start_date=${startDate}&end_date=${endDate}`);
         let txns = await response.json() as any[];
@@ -37,6 +41,21 @@ class BudgetAPIService {
             } as Transaction
         });
         return transactions;
+    }
+
+    static async postTransaction(transaction: Transaction) {
+        let response = await fetch(apiURL + '/transactions/create_transaction/', {
+            ...POST_INFO,
+            body: JSON.stringify({
+                description: transaction.description,
+                date: formatDateYearMonthDay(transaction.date),
+                cost: transaction.cost,
+                category: transaction.category_id,
+                user: transaction.user_id
+            })
+        });
+        let responseObj = await response.json();
+        return {...transaction, id: responseObj.id} as Transaction
     }
 }
 

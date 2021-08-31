@@ -56,7 +56,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
                     category_id=transaction_dict['category'],
                     user_id=transaction_dict['user'])
         new_transaction.save()
-        return Response({'status': 'created transaction'})
+        return Response({'status': 'created transaction', 'id': new_transaction.id})
     #edit transaction by id
     #delete a transaction
 
