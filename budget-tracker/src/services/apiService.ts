@@ -3,6 +3,7 @@ import User from '../model/User';
 import Transaction from "../model/LineItem";
 import { formatDateYearMonthDay, LATE_DATE } from '../utils/DateUtils';
 import { transactions } from "../slices/transactionsSlice";
+import Category from "../model/Category";
 
 const POST_INFO = {
     method: 'POST',
@@ -56,6 +57,24 @@ class BudgetAPIService {
         });
         let responseObj = await response.json();
         return {...transaction, id: responseObj.id} as Transaction
+    }
+
+    static async deleteTransaction(transaction: Transaction) {
+        let response = await fetch(apiURL + `/transactions/${transaction.id}`, {
+            method: 'DELETE'
+        })
+        return response.status;
+    }
+
+    static async postCategory(category: Category) {
+        let response = await fetch(apiURL + '/categories/', {
+            ...POST_INFO,
+            body: JSON.stringify({
+                description: category.description
+            })
+        })
+        let responseObj = await response.json();
+        return responseObj as Category;
     }
 }
 

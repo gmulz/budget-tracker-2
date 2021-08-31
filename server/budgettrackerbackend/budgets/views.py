@@ -14,14 +14,6 @@ def index(request):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all().order_by('description')
     serializer_class = CategorySerializer
-    #create a category
-    @action(methods=['post'], detail=False)
-    def create_category(self, request, pk=None):
-        category_dict = request.data
-        new_category = Category(description=category_dict['description'])
-        new_category.save()
-        return Response({'status': 'created category'})
-    #delete a category
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('name')
@@ -58,13 +50,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         new_transaction.save()
         return Response({'status': 'created transaction', 'id': new_transaction.id})
     #edit transaction by id
-    #delete a transaction
 
-    @action(methods=['delete'], detail=True)
-    def delete_transaction(self, request, pk=None):
-        transaction = self.get_object()
-        transaction.delete()
-        return Response({'status': 'transaction deleted'})
 
     
 #income per user
