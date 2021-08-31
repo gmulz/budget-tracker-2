@@ -12,7 +12,7 @@ import { RootState } from '../../redux/store';
 interface CategoryProps {
     category: Category,
     transactions: Transaction[],
-    postTransaction: (txn: Transaction) => void,
+    postTransaction: (txn: Transaction) => Promise<any>,
     user: User
 }
 
@@ -61,25 +61,28 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
         this.setState({inputCost: Number(e.target.value)});
     }
 
-    onEnter(e) {
+    async onEnter(e) {
         if (e.key === 'Enter') {
             e.preventDefault()
             let description = this.state.inputDesc;
             let cost = this.state.inputCost;
             let date = this.state.selectedDate;
             if (description !== '' && cost != undefined) {
-                this.props.postTransaction({
+                let response = await this.props.postTransaction({
                     description: description,
                     cost: cost,
                     date: date,
                     category_id: this.props.category.id,
                     user_id: this.props.user.id
                 } as Transaction)
+                if (response) {
+                    this.setState({
+                        inputDesc: '',
+                        inputCost: undefined
+                    });
+                    this.descriptionInput?.focus()
+                }
             }
-            this.setState({
-                inputDesc: '',
-                inputCost: undefined
-            })
         }
     }
 
