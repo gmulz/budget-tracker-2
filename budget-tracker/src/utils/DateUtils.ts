@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const getMonthStartEndFromDate = (date: Date) => {
     let year = date.getFullYear();
     let month = date.getMonth();
@@ -7,3 +9,8 @@ export const getMonthStartEndFromDate = (date: Date) => {
     return [startDate, endDate];
 }
 
+export const formatDateYearMonthDay = (date: Date) => {
+    return moment(date).format("YYYY-MM-DD");
+}
+
+export const LATE_DATE = new Date("2100-01-01")

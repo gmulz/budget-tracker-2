@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import userReducer from '../slices/userSlice';
 import transactionsReducer from '../slices/transactionsSlice';
 import dateRangeReducer from '../slices/dateRangeSlice';
@@ -12,6 +12,11 @@ const store = configureStore({
         dateRange: dateRangeReducer,
         categories: categoriesReducer
     },
+    middleware: (getDefaultMiddleware) => {
+        return getDefaultMiddleware({
+            serializableCheck: false
+        })
+    }
     
 });
 

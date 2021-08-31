@@ -18,8 +18,9 @@ interface DataSelectorProps {
     selectedUser: User
     start_date: Date,
     end_date: Date,
-    setUser: (user: User) => void,
-    setDateRange: (arr: [Date, Date]) => void;
+    setUser: typeof setUser,
+    setDateRange: typeof setDateRange,
+    fetchTransactions: (info: any) => void
 }
 
 
