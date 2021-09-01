@@ -14,7 +14,7 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
         return (
             <div>
                 <span className='line-item-desc'>{this.props.lineItem.description}</span>
-                <span className='line-item-date'>{(new Date(this.props.lineItem.date!)).toLocaleDateString()}</span>
+                <span className='line-item-date'>{(new Date(this.props.lineItem.date!)).toLocaleDateString('en-US', {timeZone: 'GMT'})}</span>
                 <span className='line-item-cost'>${this.props.lineItem.cost}</span>
             </div>
         );

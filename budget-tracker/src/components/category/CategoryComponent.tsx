@@ -8,12 +8,15 @@ import { connect } from 'react-redux';
 import { postTransaction } from '../../slices/transactionsSlice'
 import User from '../../model/User';
 import { RootState } from '../../redux/store';
+import BudgetAPIService from '../../services/apiService';
 
 interface CategoryProps {
     category: Category,
     transactions: Transaction[],
     postTransaction: (txn: Transaction) => Promise<any>,
-    user: User
+    user: User,
+    start_date: Date,
+    end_date: Date
 }
 
 interface CategoryState {
@@ -61,20 +64,29 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
         this.setState({inputCost: Number(e.target.value)});
     }
 
-    async onEnter(e) {
+    async onKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault()
             let description = this.state.inputDesc;
             let cost = this.state.inputCost;
             let date = this.state.selectedDate;
             if (description !== '' && cost != undefined) {
-                let response = await this.props.postTransaction({
+                let dummyTransaction = {
                     description: description,
                     cost: cost,
                     date: date,
                     category_id: this.props.category.id,
                     user_id: this.props.user.id
-                } as Transaction)
+                } as Transaction;
+                let response;
+                if (date > this.props.end_date || date < this.props.start_date) {
+                    //date out of display range, post out of courtesy but don't add to state
+                    response = await BudgetAPIService.postTransaction(dummyTransaction);
+                    //todo add little text saying the transaction was added but will not be displayed
+                    //because it is out of date range
+                } else {
+                    response = await this.props.postTransaction(dummyTransaction);
+                }
                 if (response) {
                     this.setState({
                         inputDesc: '',
@@ -97,7 +109,7 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
                         <span className='category-title'>{this.props.category.description} </span>
                         <span className='category-total'>${this.props.transactions.reduce((acc, curr) => acc + curr.cost , 0)}</span>
                     </div>
-                    <div onKeyPress={this.onEnter.bind(this)}>
+                    <div onKeyPress={this.onKeyPress.bind(this)}>
                         <input type='text' 
                                value={this.state.inputDesc} 
                                onChange={this.changeDesc.bind(this)}
@@ -117,7 +129,9 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
 
 const mapStateToProps = (state: RootState, ownProps) => {
     return {
-        user: state.user.selectedUser
+        user: state.user.selectedUser,
+        start_date: state.dateRange.start_date,
+        end_date: state.dateRange.end_date
     }
 }
 

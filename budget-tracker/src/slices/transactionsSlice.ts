@@ -50,7 +50,8 @@ export const transactions = createSlice({
         .addCase(postTransaction.fulfilled, (state, action) => {
             state.status = HTTPRequestStatus.SUCCEEDED;
             //add transaction to state
-            state.transactions.push(action.payload)
+            let transaction = action.payload;
+            state.transactions.push(transaction)
         })
     }
 })

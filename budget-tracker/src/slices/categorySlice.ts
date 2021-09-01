@@ -15,6 +15,11 @@ const initialState: CategoriesState = {
     error: undefined
 }
 
+export const postCategory = createAsyncThunk('postCategory', async (category: Category) => {
+    const response = await BudgetAPIService.postCategory(category);
+    return response;
+})
+
 export const fetchCategories = createAsyncThunk('fetchCategories', async () => {
     const categories = await BudgetAPIService.getAllCategories();
     //todo map categories from id to self
@@ -45,6 +50,11 @@ export const categories = createSlice({
         .addCase(fetchCategories.rejected, (state, action) => {
             state.status = HTTPRequestStatus.FAILED;
             state.error = action.error.message;
+        })
+        .addCase(postCategory.fulfilled, (state, action) => {
+            state.status = HTTPRequestStatus.SUCCEEDED;
+            state.categories.push(action.payload);
+            state.categories = state.categories.sort((a, b) => a.description.localeCompare(b.description));
         })
 
     }

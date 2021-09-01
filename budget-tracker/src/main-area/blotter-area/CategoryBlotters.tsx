@@ -4,7 +4,7 @@ import Category from '../../model/Category';
 import { connect } from 'react-redux';
 import store from '../../redux/store';
 import { RootState } from '../../redux/store';
-import { fetchCategories } from '../../slices/categorySlice';
+import { fetchCategories, postCategory } from '../../slices/categorySlice';
 import { fetchTransactions } from '../../slices/transactionsSlice';
 import User from '../../model/User';
 import Transaction from '../../model/LineItem';
@@ -16,10 +16,23 @@ interface CategoryBlottersProps {
     start_date: Date,
     end_date?: Date,
     fetchCategories: () => void,
-    fetchTransactions: (info: {user: User, start_date: Date, end_date?: Date}) => void
+    fetchTransactions: (info: {user: User, start_date: Date, end_date?: Date}) => void,
+    postCategory: (category: Category) => void
 }
 
-class CategoryBlotters extends React.Component<CategoryBlottersProps, {}> {
+interface CategoryBlotterState {
+    inputCategoryDesc: string;
+}
+
+class CategoryBlotters extends React.Component<CategoryBlottersProps, CategoryBlotterState> {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            inputCategoryDesc: ''
+        }
+    }
+
     async componentDidMount() {
         this.props.fetchCategories();
     }
@@ -33,12 +46,36 @@ class CategoryBlotters extends React.Component<CategoryBlottersProps, {}> {
         }
     }
 
+    onKeyPress(e) {
+        if (e.key == 'Enter') {
+            let description = this.state.inputCategoryDesc;
+            if (description != '') {
+                this.props.postCategory({ description: description} as Category);
+                this.setState({ inputCategoryDesc: ''})
+            }
+        }
+    }
+
+    changeNewCategoryDesc(e) {
+        this.setState({ inputCategoryDesc: e.target.value })
+    }
+
     render() {
         let categories = this.props.categories.map((category, idx) => {
             let transactions = this.props.transactions.filter(transaction => transaction.category_id == category.id);
             return <CategoryComponent category={category} key={idx} transactions={transactions}/>
         })
-        return categories;
+        //create new category field
+        return (
+        <div> 
+            Create new category: <input 
+                        value={this.state.inputCategoryDesc} 
+                        onKeyPress={this.onKeyPress.bind(this)}
+                        onChange={this.changeNewCategoryDesc.bind(this)}></input>
+            {categories}
+            
+        </div>
+        );
     }
 }
 
@@ -52,4 +89,4 @@ const mapStateToProps = (state: RootState, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, { fetchCategories, fetchTransactions })(CategoryBlotters)
+export default connect(mapStateToProps, { fetchCategories, fetchTransactions, postCategory })(CategoryBlotters)

@@ -10,7 +10,8 @@ export const getMonthStartEndFromDate = (date: Date) => {
 }
 
 export const formatDateYearMonthDay = (date: Date) => {
-    return moment(date).format("YYYY-MM-DD");
+    let formattedDate = moment(date).format("YYYY-MM-DD");
+    return formattedDate;
 }
 
 export const LATE_DATE = new Date("2100-01-01")
