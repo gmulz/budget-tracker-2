@@ -8,6 +8,7 @@ import { fetchCategories, postCategory } from '../../slices/categorySlice';
 import { fetchTransactions } from '../../slices/transactionsSlice';
 import User from '../../model/User';
 import Transaction from '../../model/LineItem';
+import './CategoryBlotters.scss';
 
 interface CategoryBlottersProps {
     categories: Category[],
@@ -67,12 +68,17 @@ class CategoryBlotters extends React.Component<CategoryBlottersProps, CategoryBl
         })
         //create new category field
         return (
-        <div> 
+        <div className='categories-area'>
+            <div className='new-category-creator'>
             Create new category: <input 
                         value={this.state.inputCategoryDesc} 
                         onKeyPress={this.onKeyPress.bind(this)}
-                        onChange={this.changeNewCategoryDesc.bind(this)}></input>
-            {categories}
+                        onChange={this.changeNewCategoryDesc.bind(this)}
+                        placeholder='Category title'></input>
+            </div>
+            <div className='categories-container'>
+                {categories}
+            </div>
             
         </div>
         );

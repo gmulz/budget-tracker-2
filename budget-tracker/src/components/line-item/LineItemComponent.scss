@@ -1,0 +1,27 @@
+.line-item {
+    &.even {
+        background-color: #808080;
+    }
+    &.odd {
+        background-color: #616161;
+    }
+    
+    padding: 10px;
+    display: flex;
+    .line-item-left {
+        display: flex;
+        flex: 1 1 0;
+        .line-item-desc {
+            flex: 1 1 0;
+        }
+        .line-item-date {
+            flex: 1 1 0;
+        }
+    }
+    .line-item-cost {
+        flex: 0.2 1 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

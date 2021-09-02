@@ -1,0 +1,30 @@
+.category {
+    .category-header {
+        background-color: #3d3d3d;
+        padding: 10px;
+        border-radius: 4px;
+        display: flex;
+        .category-header-left {
+            flex: 1 1 0;
+            .category-title {
+                font-size: x-large;
+                
+            }
+
+            .new-line-item-creator {
+                margin-top: 4px;
+            }
+        }
+        .category-header-right {
+            flex: .2 1 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    .line-items-container {
+        max-height: 200px;
+        overflow: auto;
+    }
+    margin-bottom: 4px;
+}

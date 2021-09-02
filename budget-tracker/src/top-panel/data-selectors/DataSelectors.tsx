@@ -7,6 +7,7 @@ import { setDateRange } from '../../slices/dateRangeSlice'
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/store';
 import User from '../../model/User';
+import './DataSelectors.scss'
 
 
 

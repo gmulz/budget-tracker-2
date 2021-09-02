@@ -9,6 +9,7 @@ import { postTransaction } from '../../slices/transactionsSlice'
 import User from '../../model/User';
 import { RootState } from '../../redux/store';
 import BudgetAPIService from '../../services/apiService';
+import './CategoryComponent.scss';
 
 interface CategoryProps {
     category: Category,
@@ -100,28 +101,39 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
 
     render() {
         let lineItems = this.props.transactions.map((lineItem, idx) => {
-            return <LineItemComponent lineItem={lineItem} key={idx} />
+            return <LineItemComponent lineItem={lineItem} key={idx} idx={idx} />
         });
         return (
-            <div>
-                <div className='line-item-header'>
-                    <div>
-                        <span className='category-title'>{this.props.category.description} </span>
-                        <span className='category-total'>${this.props.transactions.reduce((acc, curr) => acc + curr.cost , 0)}</span>
+            <div className='category'>
+                <div className='category-header'>
+                    <div className='category-header-left'>
+                        <div>
+                            <span className='category-title'>{this.props.category.description} </span>
+                        </div>
+                        <div onKeyPress={this.onKeyPress.bind(this)} className='new-line-item-creator'>
+                            New expense: <input type='text' 
+                                value={this.state.inputDesc} 
+                                onChange={this.changeDesc.bind(this)}
+                                ref={(input) => this.descriptionInput = input}
+                                placeholder='Description'></input>
+                            <input type='number' 
+                                value={this.state.inputCost || ''} 
+                                onChange={this.changeCost.bind(this)}
+                                placeholder='Cost'></input>
+                            <button className='date-button' onClick={this.clickDateButton.bind(this)}>
+                                {moment(this.state.selectedDate).format('MMM DD YY')}
+                            </button>
+                            {this.state.showDatePicker && (<DatePicker selected={this.state.selectedDate} inline onChange={this.changeDate.bind(this)}></DatePicker>)}
+                        </div>
                     </div>
-                    <div onKeyPress={this.onKeyPress.bind(this)}>
-                        <input type='text' 
-                               value={this.state.inputDesc} 
-                               onChange={this.changeDesc.bind(this)}
-                               ref={(input) => this.descriptionInput = input}></input>
-                        <input type='number' value={this.state.inputCost || ''} onChange={this.changeCost.bind(this)}></input>
-                        <button className='date-button' onClick={this.clickDateButton.bind(this)}>
-                            {moment(this.state.selectedDate).format('MMM DD YY')}
-                        </button>
-                        {this.state.showDatePicker && (<DatePicker selected={this.state.selectedDate} inline onChange={this.changeDate.bind(this)}></DatePicker>)}
+                    <div className='category-header-right'>
+                        <span className='category-total'>${this.props.transactions.reduce((acc, curr) => acc + curr.cost , 0)}</span>
+
                     </div>
                 </div>
-                {lineItems}
+                <div className='line-items-container'>
+                    {lineItems}
+                </div>
             </div>
         )
     }

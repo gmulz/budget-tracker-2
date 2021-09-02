@@ -1,0 +1,10 @@
+#top-panel {
+    min-height: 50px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    #grand-total {
+        display: flex;
+        justify-content: center;
+    }
+}

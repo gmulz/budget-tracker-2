@@ -1,10 +1,8 @@
 import React from 'react';
 import './App.css';
 import CategoryBlotters from './main-area/blotter-area/CategoryBlotters';
-import Category from './model/Category';
-import Transaction from './model/LineItem';
 import TopPanel from './top-panel/TopPanel';
-import { getMonthStartEndFromDate } from './utils/DateUtils';
+import RecurringBlotters from './main-area/sidebar/RecurringBlotters';
 
 interface BudgetState {
   current_user?: string,
@@ -20,13 +18,13 @@ class App extends React.Component<{}, BudgetState> {
   
   render() {
     return (
-      <div>
+      <>
         <TopPanel />
-        <div>
+        <div id='data-area'>
           <CategoryBlotters/>
-          
+          <RecurringBlotters />
         </div>
-      </div>
+      </>
     );
   }
 }
