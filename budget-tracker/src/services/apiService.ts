@@ -59,8 +59,26 @@ class BudgetAPIService {
         return {...transaction, id: responseObj.id} as Transaction
     }
 
+    static async putTransaction(transaction: Transaction) {
+        let response = await fetch(apiURL + `/transactions/${transaction.id}/`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                description: transaction.description,
+                date: formatDateYearMonthDay(transaction.date),
+                cost: transaction.cost,
+                category: `${apiURL}/categories/${transaction.category_id}/`,
+                user: `${apiURL}/users/${transaction.user_id}/`,
+                id: transaction.id
+            })
+        });
+        let responseObj = await response.json();
+        return transaction;
+
+    }
+
     static async deleteTransaction(transaction: Transaction) {
-        let response = await fetch(apiURL + `/transactions/${transaction.id}`, {
+        let response = await fetch(apiURL + `/transactions/${transaction.id}/`, {
             method: 'DELETE'
         })
         return response.status;

@@ -28,12 +28,18 @@ export const fetchTransactions = createAsyncThunk('fetchTransactions', async (in
 export const postTransaction = createAsyncThunk('postTransaction', async (transaction: Transaction) => {
     const response = await BudgetAPIService.postTransaction(transaction);
     return response;
+});
+
+export const editTransaction = createAsyncThunk('editTransaction', async (transaction: Transaction) => {
+    const response = await BudgetAPIService.putTransaction(transaction);
+    return response;
 })
 
 export const transactions = createSlice({
     name: 'transactions',
     initialState,
-    reducers: {},
+    reducers: {
+    },
     extraReducers(builder) {
         builder
         .addCase(fetchTransactions.pending, (state, action) => {
@@ -52,6 +58,13 @@ export const transactions = createSlice({
             //add transaction to state
             let transaction = action.payload;
             state.transactions.push(transaction)
+        })
+        .addCase(editTransaction.fulfilled, (state, action) => {
+            state.status = HTTPRequestStatus.SUCCEEDED;
+            //insert transaction to state
+            let transaction = action.payload;
+            let txnIndex = state.transactions.findIndex(txn => txn.id = transaction.id);
+            state.transactions[txnIndex] = transaction;
         })
     }
 })

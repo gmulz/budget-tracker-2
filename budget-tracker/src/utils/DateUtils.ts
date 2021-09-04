@@ -10,7 +10,7 @@ export const getMonthStartEndFromDate = (date: Date) => {
 }
 
 export const formatDateYearMonthDay = (date: Date) => {
-    let formattedDate = moment(date).format("YYYY-MM-DD");
+    let formattedDate = moment(date).utcOffset(0).format("YYYY-MM-DD");
     return formattedDate;
 }
 

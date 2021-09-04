@@ -1,3 +1,7 @@
+.hide {
+    display: none !important;
+}
+
 .line-item {
     &.even {
         background-color: #808080;
@@ -13,8 +17,19 @@
         flex: 1 1 0;
         .line-item-desc {
             flex: 1 1 0;
+            .fa {
+                margin-left: 1rem;
+                cursor: pointer;
+                
+            }
+        }
+        .line-item-desc-input {
+            flex: 1 1 0;
         }
         .line-item-date {
+            flex: 1 1 0;
+        }
+        .line-item-date-button {
             flex: 1 1 0;
         }
     }
@@ -23,5 +38,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+    .line-item-cost-input {
+        flex: 0.2 1 0;
     }
 }
