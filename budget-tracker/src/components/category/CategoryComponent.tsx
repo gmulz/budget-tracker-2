@@ -5,16 +5,18 @@ import LineItemComponent from '../line-item/LineItemComponent';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { postTransaction } from '../../slices/transactionsSlice'
+import { postTransaction, postRecurringTransaction } from '../../slices/transactionsSlice'
 import User from '../../model/User';
 import { RootState } from '../../redux/store';
 import BudgetAPIService from '../../services/apiService';
 import './CategoryComponent.scss';
+import { getMonthStartEndFromDate } from '../../utils/DateUtils';
 
 interface CategoryProps {
     category: Category,
     transactions: Transaction[],
     postTransaction: (txn: Transaction) => Promise<any>,
+    postRecurringTransaction: (txn: Transaction) => Promise<any>,
     user: User,
     start_date: Date,
     end_date: Date
@@ -65,36 +67,68 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
         this.setState({inputCost: Number(e.target.value)});
     }
 
+    isRecurringCategory() {
+        return this.props.category.is_recurring;
+    }
+
+    async postNewTransaction() {
+        let description = this.state.inputDesc;
+        let cost = this.state.inputCost;
+        let date = this.isRecurringCategory() ? getMonthStartEndFromDate(this.state.selectedDate)[0] : this.state.selectedDate;
+        if (description !== '' && cost != undefined) {
+            let dummyTransaction = {
+                description: description,
+                cost: cost,
+                date: date,
+                category_id: this.props.category.id,
+                user_id: this.props.user.id
+            } as Transaction;
+            console.log(description);
+            let response;
+            if (this.isRecurringCategory()) {
+                response = await this.postRecurringTransaction(dummyTransaction);
+            } else {
+                response = await this.postOneTimeTransaction(dummyTransaction);
+            }
+            return response;
+        }
+        return null;
+    }
+
+    async postRecurringTransaction(transaction: Transaction) {
+        let response;
+        if (transaction.date > this.props.end_date || transaction.date < this.props.start_date) {
+            response = await BudgetAPIService.postRecurringTransaction(transaction);
+        }
+        else {
+            response = await this.props.postRecurringTransaction(transaction);
+        }
+        return response;
+    }
+
+    async postOneTimeTransaction(transaction : Transaction) {
+        let response;
+        if (transaction.date > this.props.end_date || transaction.date < this.props.start_date) {
+            //date out of display range, post out of courtesy but don't add to state
+            response = await BudgetAPIService.postTransaction(transaction);
+            //todo add little text saying the transaction was added but will not be displayed
+            //because it is out of date range
+        } else {
+            response = await this.props.postTransaction(transaction);
+        }
+        return response;
+    }
+
     async onKeyPress(e) {
         if (e.key === 'Enter') {
             e.preventDefault()
-            let description = this.state.inputDesc;
-            let cost = this.state.inputCost;
-            let date = this.state.selectedDate;
-            if (description !== '' && cost != undefined) {
-                let dummyTransaction = {
-                    description: description,
-                    cost: cost,
-                    date: date,
-                    category_id: this.props.category.id,
-                    user_id: this.props.user.id
-                } as Transaction;
-                let response;
-                if (date > this.props.end_date || date < this.props.start_date) {
-                    //date out of display range, post out of courtesy but don't add to state
-                    response = await BudgetAPIService.postTransaction(dummyTransaction);
-                    //todo add little text saying the transaction was added but will not be displayed
-                    //because it is out of date range
-                } else {
-                    response = await this.props.postTransaction(dummyTransaction);
-                }
-                if (response) {
-                    this.setState({
-                        inputDesc: '',
-                        inputCost: undefined
-                    });
-                    this.descriptionInput?.focus()
-                }
+            let response = await this.postNewTransaction();
+            if (response) {
+                this.setState({
+                    inputDesc: '',
+                    inputCost: undefined
+                });
+                this.descriptionInput?.focus()
             }
         }
     }
@@ -120,9 +154,9 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
                                 value={this.state.inputCost || ''} 
                                 onChange={this.changeCost.bind(this)}
                                 placeholder='Cost'></input>
-                            <button className='date-button' onClick={this.clickDateButton.bind(this)}>
+                            {!this.isRecurringCategory() && <button className='date-button' onClick={this.clickDateButton.bind(this)}>
                                 {moment(this.state.selectedDate).format('MMM DD YY')}
-                            </button>
+                            </button>}
                             {this.state.showDatePicker && (<DatePicker selected={this.state.selectedDate} inline onChange={this.changeDate.bind(this)}></DatePicker>)}
                         </div>
                     </div>
@@ -148,4 +182,4 @@ const mapStateToProps = (state: RootState, ownProps) => {
 }
 
 
-export default connect(mapStateToProps, { postTransaction })(CategoryComponent);
+export default connect(mapStateToProps, { postTransaction, postRecurringTransaction })(CategoryComponent);

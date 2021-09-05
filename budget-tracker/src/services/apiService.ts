@@ -4,6 +4,7 @@ import Transaction from "../model/LineItem";
 import { formatDateYearMonthDay, LATE_DATE } from '../utils/DateUtils';
 import { transactions } from "../slices/transactionsSlice";
 import Category from "../model/Category";
+import { RecurringExpense } from "../model/RecurringExpense";
 
 const POST_INFO = {
     method: 'POST',
@@ -59,6 +60,26 @@ class BudgetAPIService {
         return {...transaction, id: responseObj.id} as Transaction
     }
 
+    static async postRecurringExpenseFromTransaction(transaction: Transaction) {
+        let response = await fetch(apiURL + '/recurring_expenses/', {
+            ...POST_INFO,
+            body: JSON.stringify({
+                description: transaction.description,
+                cost: transaction.cost,
+                category: `${apiURL}/categories/${transaction.category_id}/`,
+                user: `${apiURL}/users/${transaction.user_id}/`,
+            })
+         });
+         let responseObj = await response.json() as RecurringExpense;
+         return responseObj;
+    }
+
+    static async postRecurringTransaction(transaction: Transaction) : Promise<[Transaction, RecurringExpense]> {
+        let responseTxn = await this.postTransaction(transaction);
+        let responseRecurringExpense = await this.postRecurringExpenseFromTransaction(transaction);
+        return [responseTxn, responseRecurringExpense]
+    }
+
     static async putTransaction(transaction: Transaction) {
         let response = await fetch(apiURL + `/transactions/${transaction.id}/`, {
             method: 'PUT',
@@ -74,7 +95,6 @@ class BudgetAPIService {
         });
         let responseObj = await response.json();
         return transaction;
-
     }
 
     static async deleteTransaction(transaction: Transaction) {

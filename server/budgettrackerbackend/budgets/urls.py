@@ -6,6 +6,7 @@ router = routers.DefaultRouter()
 router.register(r'categories', views.CategoryViewSet)
 router.register(r'users', views.UserViewSet)
 router.register(r'transactions', views.TransactionViewSet)
+router.register(r'recurring_expenses', views.RecurringExpenseViewSet)
 
 
 urlpatterns = [

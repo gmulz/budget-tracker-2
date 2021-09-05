@@ -13,6 +13,7 @@ class Income(models.Model):
 
 class Category(models.Model):
     description = models.CharField(max_length=255)
+    is_recurring = models.BooleanField(default=False)
 
 class Transaction(models.Model):
     description = models.CharField(max_length=255)
@@ -21,3 +22,9 @@ class Transaction(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     #split_with?
+
+class RecurringExpense(models.Model):
+    description = models.CharField(max_length=255)
+    cost = models.FloatField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

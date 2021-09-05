@@ -33,6 +33,11 @@ export const postTransaction = createAsyncThunk('postTransaction', async (transa
 export const editTransaction = createAsyncThunk('editTransaction', async (transaction: Transaction) => {
     const response = await BudgetAPIService.putTransaction(transaction);
     return response;
+});
+
+export const postRecurringTransaction = createAsyncThunk('postRecurringTransaction', async (transaction: Transaction) => {
+    const response = await BudgetAPIService.postRecurringTransaction(transaction);
+    return response;
 })
 
 export const transactions = createSlice({
@@ -65,6 +70,12 @@ export const transactions = createSlice({
             let transaction = action.payload;
             let txnIndex = state.transactions.findIndex(txn => txn.id = transaction.id);
             state.transactions[txnIndex] = transaction;
+        })
+        .addCase(postRecurringTransaction.fulfilled, (state, action) => {
+            state.status = HTTPRequestStatus.SUCCEEDED;
+            //insert transaction to state
+            let transaction = action.payload[0];
+            state.transactions.push(transaction);
         })
     }
 })

@@ -3,14 +3,16 @@
         "model": "budgets.category",
         "pk": 1,
         "fields": {
-            "description": "Monthly"
+            "description": "Monthly",
+            "is_recurring": true
         }
     },
     {
         "model": "budgets.category",
         "pk": 2,
         "fields": {
-            "description": "Yearly"
+            "description": "Yearly",
+            "is_recurring": true
         }
     }
 ]

@@ -42,7 +42,7 @@ class RecurringBlotters extends React.Component<RecurringBlottersProps, {}> {
 const mapStateToProps = (state: RootState, ownProps) => {
     return {
         transactions: state.transactions.transactions,
-        recurringCategories: state.categories.categories.filter(cat => ['Monthly', 'Yearly'].includes(cat.description))
+        recurringCategories: state.categories.categories.filter(cat => cat.is_recurring)
     } as RecurringBlottersProps
 }
 

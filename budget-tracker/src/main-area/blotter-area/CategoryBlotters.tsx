@@ -87,7 +87,7 @@ class CategoryBlotters extends React.Component<CategoryBlottersProps, CategoryBl
 
 const mapStateToProps = (state: RootState, ownProps) => {
     return {
-        categories: state.categories.categories,
+        categories: state.categories.categories.filter(cat => !cat.is_recurring),
         transactions: state.transactions.transactions,
         user: state.user.selectedUser,
         start_date: new Date(state.dateRange.start_date),

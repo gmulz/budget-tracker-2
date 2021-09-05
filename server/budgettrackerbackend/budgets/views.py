@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .serializers import CategorySerializer, UserSerializer, TransactionSerializer
-from .models import Category, User, Transaction
+from .serializers import CategorySerializer, UserSerializer, TransactionSerializer, RecurringExpenseSerializer
+from .models import Category, User, Transaction, RecurringExpense
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -15,10 +15,24 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all().order_by('description')
     serializer_class = CategorySerializer
 
+    @action(methods=['get'], detail=False)
+    def recurring_categories(self, request, pk=None):
+        categories = Category.objects.filter(is_recurring=True).values()
+        return Response(categories)
+    
+    @action(methods=['get'], detail=False)
+    def onetime_categories(self, request, pk=None):
+        categories = Category.objects.filter(is_recurring=False).values()
+        return Response(categories)
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('name')
     serializer_class = UserSerializer
 
+
+class RecurringExpenseViewSet(viewsets.ModelViewSet):
+    queryset = RecurringExpense.objects.all()
+    serializer_class = RecurringExpenseSerializer
 
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
