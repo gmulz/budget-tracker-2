@@ -6,10 +6,12 @@ import DatePicker from 'react-datepicker';
 import './LineItemComponent.scss';
 import { connect } from 'react-redux';
 import { editTransaction } from '../../slices/transactionsSlice';
+import Category from '../../model/Category';
 
 
 interface LineItemProps {
     lineItem: Transaction,
+    category: Category,
     idx: number,
     editTransaction: (txn: Transaction) => Promise<any>
 }
@@ -93,6 +95,10 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
         return this.state.editing ? 'hide' : '';
     }
 
+    isRecurringTransaction() {
+        return this.props.category.is_recurring;
+    }
+
     render() {
         return (
             <div className={`line-item ${this.props.idx % 2 === 0 ? 'even' : 'odd'}`}
@@ -106,9 +112,13 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
                               onClick={this.editButtonClick.bind(this)}></span>
                     </span>
                     <input className={`line-item-desc-input ${this.editableFieldClass()}`}
-                           value={this.state.dummyTransaction?.description}
+                           value={this.state.dummyTransaction?.description || ''}
                            onChange={this.changeDescription.bind(this)}></input>
-                    <span className={`line-item-date ${this.displayFieldClass()}`}>{(new Date(this.props.lineItem.date!)).toLocaleDateString('en-US', {timeZone: 'GMT'})}</span>
+                    <span className={`line-item-date ${this.displayFieldClass()}`}>{
+                            this.isRecurringTransaction() 
+                                            ? moment(this.props.lineItem.date).utcOffset(0).format('MMMM YYYY') 
+                                            : moment(this.props.lineItem.date).utcOffset(0).format('M/D/YY')
+                    }</span>
                     <button className={`line-item-date-button ${this.editableFieldClass()}`}
                             onClick={this.clickDateButton.bind(this)}>
                         {moment(this.state.dummyTransaction?.date).utcOffset(0).format('MMM DD YY')}
@@ -118,7 +128,7 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
                 <span className={`line-item-cost ${this.displayFieldClass()}`}>${this.props.lineItem.cost}</span>
                 <input className={`line-item-cost-input ${this.editableFieldClass()}`} 
                        type='number'
-                       value={this.state.dummyTransaction?.cost}
+                       value={this.state.dummyTransaction?.cost || ''}
                        onChange={this.changeCost.bind(this)}/>
             </div>
         );

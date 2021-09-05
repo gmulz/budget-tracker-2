@@ -68,7 +68,7 @@ export const transactions = createSlice({
             state.status = HTTPRequestStatus.SUCCEEDED;
             //insert transaction to state
             let transaction = action.payload;
-            let txnIndex = state.transactions.findIndex(txn => txn.id = transaction.id);
+            let txnIndex = state.transactions.findIndex(txn => txn.id == transaction.id);
             state.transactions[txnIndex] = transaction;
         })
         .addCase(postRecurringTransaction.fulfilled, (state, action) => {
