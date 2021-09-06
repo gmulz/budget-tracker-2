@@ -19,12 +19,12 @@ class Transaction(models.Model):
     description = models.CharField(max_length=255)
     date = models.DateField()
     cost = models.FloatField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     #split_with?
 
 class RecurringExpense(models.Model):
     description = models.CharField(max_length=255)
     cost = models.FloatField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
