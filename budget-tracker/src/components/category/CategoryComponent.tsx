@@ -139,7 +139,7 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
             .map((lineItem, idx) => {
             return <LineItemComponent category={this.props.category} lineItem={lineItem} key={idx} idx={idx} />
         });
-        return (
+        return (//todo add delete category button, hide new expense creator if uncategorized
             <div className='category'>
                 <div className='category-header'>
                     <div className='category-header-left'>

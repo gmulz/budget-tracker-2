@@ -60,11 +60,13 @@ class TopPanel extends React.Component<TopPanelProps, TopPanelState>{
                     Grand Total ${this.props.transactions.reduce((acc, curr) => acc + curr.cost, 0)}
                 </div>
                 <div id='new-user-creator'>
+                    <div>
                     Create new user: 
                     <input placeholder='User name' 
                             value={this.state.newUserName} 
                             onKeyPress={this.keyPressed.bind(this)}
                             onChange={this.changeUserInput.bind(this)}/>
+                    </div>
                 </div>
             </div>
         )

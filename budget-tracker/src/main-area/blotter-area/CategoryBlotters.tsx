@@ -62,11 +62,18 @@ class CategoryBlotters extends React.Component<CategoryBlottersProps, CategoryBl
     }
 
     render() {
-        let categories = this.props.categories.map((category, idx) => {
+        let categoryComponents = this.props.categories.map((category, idx) => {
             let transactions = this.props.transactions.filter(transaction => transaction.category_id == category.id);
             return <CategoryComponent category={category} key={idx} transactions={transactions}/>
-        })
-        //create new category field
+        });
+
+        //create category for orphaned transactions
+        let nullCategory : Category = { id: -1, description: "Uncategorized", is_recurring: false};
+        let nullTransactions = this.props.transactions.filter(transaction => transaction.category_id == null);
+        let nullCategoryComponent = (<CategoryComponent category={nullCategory} 
+                                                        transactions={nullTransactions} 
+                                                        key={categoryComponents.length}/>)
+        if (nullTransactions.length > 0) categoryComponents.push(nullCategoryComponent);
         return (
         <div className='categories-area'>
             <div className='new-category-creator'>
@@ -77,7 +84,7 @@ class CategoryBlotters extends React.Component<CategoryBlottersProps, CategoryBl
                         placeholder='Category title'></input>
             </div>
             <div className='categories-container'>
-                {categories}
+                {categoryComponents}
             </div>
             
         </div>
