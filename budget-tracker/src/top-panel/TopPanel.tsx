@@ -4,19 +4,67 @@ import './TopPanel.scss';
 import { connect } from 'react-redux';
 import Transaction from '../model/LineItem';
 import { RootState } from '../redux/store';
+import { postUser } from '../slices/userSlice';
+import User from '../model/User';
 
 interface TopPanelProps {
     transactions: Transaction[],
+    postUser: (string: string) => Promise<any>
 }
 
-class TopPanel extends React.Component<TopPanelProps, {}>{
+interface TopPanelState {
+    newUserName: string;
+}
+
+class TopPanel extends React.Component<TopPanelProps, TopPanelState>{
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            newUserName: ''
+        }
+    }
+
+    componentDidMount() {
+
+    }
     
+    async addUser(username: string) {
+        let newUser = await this.props.postUser(username);
+        return newUser as User;
+    }
+
+    changeUserName(name) {
+        this.setState({
+            newUserName: name
+        })
+    }
+
+    changeUserInput(e) {
+        this.changeUserName(e.target.value);
+    }
+
+    async keyPressed(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            await this.addUser(this.state.newUserName);
+            this.changeUserName('');
+        }
+    }
+
     render() {
         return (
             <div id='top-panel'>
                 <DataSelector />
                 <div id='grand-total'>
                     Grand Total ${this.props.transactions.reduce((acc, curr) => acc + curr.cost, 0)}
+                </div>
+                <div id='new-user-creator'>
+                    Create new user: 
+                    <input placeholder='User name' 
+                            value={this.state.newUserName} 
+                            onKeyPress={this.keyPressed.bind(this)}
+                            onChange={this.changeUserInput.bind(this)}/>
                 </div>
             </div>
         )
@@ -29,4 +77,4 @@ const mapStateToProps = (state: RootState, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, {})(TopPanel);
+export default connect(mapStateToProps, { postUser })(TopPanel);

@@ -17,6 +17,16 @@ class BudgetAPIService {
         return await response.json() as User[];
     }
 
+    static async postNewUser(userName: string) {
+        let response = await fetch(apiURL + '/users/',{
+            ...POST_INFO,
+            body: JSON.stringify({
+                name: userName
+            })
+        })
+        return await response.json() as User;
+    }
+
     static async getAllCategories() {
         let response = await fetch(apiURL + "/categories/");
         return await response.json() as Category[];

@@ -105,7 +105,7 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
         return this.props.category.is_recurring;
     }
 
-    render() {
+    render() { //todo allow edit category?
         return (
             <div className={`line-item ${this.props.idx % 2 === 0 ? 'even' : 'odd'}`}
                  onMouseOver={this.handleMouseOver.bind(this)}

@@ -2,7 +2,7 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import BudgetAPIService from '../../services/apiService';
-import { setUser } from '../../slices/userSlice';
+import { setUser, fetchUsers } from '../../slices/userSlice';
 import { setDateRange } from '../../slices/dateRangeSlice'
 import { connect } from 'react-redux';
 import { RootState } from '../../redux/store';
@@ -12,37 +12,32 @@ import './DataSelectors.scss'
 
 
 interface DataSelectorsState {
-    users: User[];
+    
 }
 
 interface DataSelectorProps {
+    users: User[],
     selectedUser: User
     start_date: Date,
     end_date: Date,
     setUser: typeof setUser,
     setDateRange: typeof setDateRange,
-    fetchTransactions: (info: any) => void
+    fetchTransactions: (info: any) => void,
+    fetchUsers: () => Promise<any>
 }
 
 
 class DataSelectors extends React.Component<DataSelectorProps, DataSelectorsState> {
-    dummyUser = { name: '', id: -1, index: -1 }
+    dummyUser = { name: '', id: -1 }
     constructor(props: any) {
         super(props);
-        this.state = {
-            users: [],
-        }
+        this.state = {}
     }
     
     
 
     async componentDidMount() {
-        let users = await BudgetAPIService.getAllUsers();
-        users = users.map((user, index) => {
-            user['index'] = index;
-            return user;
-        })
-        this.setState({ users: users });
+        await this.props.fetchUsers();
         let savedUserId = localStorage.getItem('userId');
         if (savedUserId) {
             let userFromId = this.getUserFromId(Number(savedUserId));
@@ -51,7 +46,10 @@ class DataSelectors extends React.Component<DataSelectorProps, DataSelectorsStat
                 return;
             }
         }
-        this.setUser(users[0]);
+    }
+
+    componentDidUpdate() {
+        
     }
 
     handleSubmit() {
@@ -59,7 +57,7 @@ class DataSelectors extends React.Component<DataSelectorProps, DataSelectorsStat
     }
 
     getUserFromId(userId: number) {
-        return this.state.users.find(user => user.id == userId);
+        return this.props.users.find(user => user.id == userId);
     }
 
     onChangeUser(event) {
@@ -84,7 +82,7 @@ class DataSelectors extends React.Component<DataSelectorProps, DataSelectorsStat
                 <form onSubmit={this.handleSubmit} >
                     Showing expenses for user: 
                     <select value={this.props.selectedUser.id} onChange={this.onChangeUser.bind(this)}>
-                        { this.state.users.map((user) => {
+                        { this.props.users.map((user) => {
                             return <option value={user.id} key={user.id}>{user.name}</option>
                         })}
                     </select>
@@ -103,10 +101,11 @@ class DataSelectors extends React.Component<DataSelectorProps, DataSelectorsStat
 
 const mapStateToProps = (state: RootState, ownProps) => {
     return { 
+        users: state.user.users,
         selectedUser: state.user.selectedUser,
         start_date: new Date(state.dateRange.start_date),
         end_date: state.dateRange.end_date ? new Date(state.dateRange.end_date) : null
     }
 }
 
-export default connect(mapStateToProps, { setUser, setDateRange })(DataSelectors);
+export default connect(mapStateToProps, { setUser, setDateRange, fetchUsers })(DataSelectors);

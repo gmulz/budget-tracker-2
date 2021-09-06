@@ -4,6 +4,7 @@ import CategoryBlotters from './main-area/blotter-area/CategoryBlotters';
 import TopPanel from './top-panel/TopPanel';
 import RecurringBlotters from './main-area/sidebar/RecurringBlotters';
 
+
 interface BudgetState {
   current_user?: string,
   start_date: Date,
@@ -14,6 +15,10 @@ interface BudgetState {
 class App extends React.Component<{}, BudgetState> {
   constructor(props: any) {
     super(props);
+  }
+
+  async componentDidMount() {
+
   }
   
   render() {
