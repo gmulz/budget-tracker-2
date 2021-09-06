@@ -71,10 +71,10 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
         document.addEventListener('click', this.outsideClickHandler, false);
     }
 
-    makeUnEditable() {
+    async makeUnEditable() {
         document.removeEventListener('click', this.outsideClickHandler, false);
         //post to database
-        this.props.editTransaction(this.state.dummyTransaction!);
+        await this.props.editTransaction(this.state.dummyTransaction!);
         this.setState({editing: false, showDatePicker: false, dummyTransaction: null});
     }
 
@@ -92,7 +92,7 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
     }
 
     changeCategory(e) {
-        let categoryId : number = e.target.value;
+        let categoryId : number = Number(e.target.value);
         this.setState( {dummyTransaction: {...this.state.dummyTransaction, category_id: categoryId} as Transaction})
     }
 
@@ -156,7 +156,7 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
                         type='number'
                         value={this.state.dummyTransaction?.cost || ''}
                         onChange={this.changeCost.bind(this)}/>
-                    <select value={this.props.lineItem.category_id} onChange={this.changeCategory.bind(this)}>
+                    <select value={this.state.dummyTransaction?.category_id || undefined} onChange={this.changeCategory.bind(this)}>
                         {this.props.categories.map(cat => {
                             return <option value={cat.id} key={cat.id}>{cat.description}</option>
                         })}

@@ -3,7 +3,7 @@ interface Transaction {
     date: Date,
     cost: number,
     id?: number,
-    category_id: number,
+    category_id: number | null,
     user_id: number
 }
 

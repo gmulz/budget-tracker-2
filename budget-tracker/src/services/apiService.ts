@@ -124,6 +124,25 @@ class BudgetAPIService {
         let responseObj = await response.json();
         return responseObj as Category;
     }
+
+    static async putCategory(category: Category) {
+        let response = await fetch(apiURL + `/categories/${category.id}/`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                ...category
+            })
+        });
+        let responseObj = await response.json();
+        return category;
+    }
+
+    static async deleteCategory(category: Category) {
+        let response = await fetch(apiURL + `/categories/${category.id}/`, {
+            method: 'DELETE'
+        })
+        return response.status;
+    }
 }
 
 export default BudgetAPIService

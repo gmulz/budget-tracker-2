@@ -20,7 +20,6 @@ export const dateRange = createSlice({
     initialState,
     reducers: {
         setDateRange: (state, action: PayloadAction<[Date, Date]>) => {
-            console.log("set date");
             let [start, end] = action.payload;
             state.start_date = start;
             if (end) {

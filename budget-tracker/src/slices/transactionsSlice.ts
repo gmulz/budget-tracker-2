@@ -4,7 +4,7 @@ import { HTTPRequestStatus } from '../enums/HTTPRequestStatus';
 import Transaction from '../model/LineItem';
 import User from '../model/User';
 import BudgetAPIService from '../services/apiService';
-
+import { deleteCategory } from './categorySlice';
 import { LATE_DATE } from '../utils/DateUtils'
 
 
@@ -83,10 +83,19 @@ export const transactions = createSlice({
             state.transactions.push(transaction);
         })
         .addCase(deleteTransaction.fulfilled, (state, action) => {
+            state.status = HTTPRequestStatus.SUCCEEDED;
             let transaction = action.payload;
             let txnIndex = state.transactions.findIndex(txn => txn.id == transaction.id);
             state.transactions.splice(txnIndex, 1);
+        }).addCase(deleteCategory.fulfilled, (state, action) => {
+          let category = action.payload;
+          state.transactions.forEach(txn => {
+              if (txn.category_id == category.id) {
+                  txn.category_id = null;
+              }
+          })  
         });
+        
     }
 })
 
