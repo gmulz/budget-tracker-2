@@ -12,7 +12,7 @@ import './DataSelectors.scss'
 
 
 interface DataSelectorsState {
-    users: any[];
+    users: User[];
 }
 
 interface DataSelectorProps {
@@ -43,17 +43,35 @@ class DataSelectors extends React.Component<DataSelectorProps, DataSelectorsStat
             return user;
         })
         this.setState({ users: users });
-        this.props.setUser(users[0]);
+        let savedUserId = localStorage.getItem('userId');
+        if (savedUserId) {
+            let userFromId = this.getUserFromId(Number(savedUserId));
+            if (userFromId) {
+                this.setUser(userFromId);
+                return;
+            }
+        }
+        this.setUser(users[0]);
     }
 
     handleSubmit() {
         
     }
 
+    getUserFromId(userId: number) {
+        return this.state.users.find(user => user.id == userId);
+    }
+
     onChangeUser(event) {
-        let userFromId = this.state.users.find(user => user.id == event.target.value);
-        //propagate state to redux store
-        this.props.setUser(userFromId)
+        let userFromId = this.getUserFromId(event.target.value);
+        if (userFromId) {
+            this.setUser(userFromId);
+        }
+    }
+
+    setUser(user: User) {
+        this.props.setUser(user);
+        localStorage.setItem('userId', user.id.toString())
     }
 
     onChangeDate(event) {

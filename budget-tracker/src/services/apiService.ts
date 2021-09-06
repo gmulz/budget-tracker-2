@@ -14,12 +14,12 @@ const POST_INFO = {
 class BudgetAPIService {
     static async getAllUsers() {
         let response = await fetch(apiURL + "/users/");
-        return await response.json();
+        return await response.json() as User[];
     }
 
     static async getAllCategories() {
         let response = await fetch(apiURL + "/categories/");
-        return await response.json();
+        return await response.json() as Category[];
     }
 
     static async getTransactionsForUserAndDateRange(user: User, start_date: Date, end_date?: Date) {
