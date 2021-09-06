@@ -12,35 +12,56 @@
     
     padding: 10px;
     display: flex;
-    .line-item-left {
+    .line-item-display {
         display: flex;
         flex: 1 1 0;
+        flex-direction: row;
+        .line-item-left {
+            display: flex;
+            flex: 1 1 0;
+            .fa {
+                cursor: pointer;
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+            .line-item-desc {
+                flex: 1 1 0;
+                
+            }
+
+            .line-item-date {
+                flex: 1 1 0;
+            }
+
+        }
+        .line-item-cost {
+            flex: 0.2 1 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    }
+    .line-item-editor {
+        display: flex;
+        flex: 1 1 0;
+        flex-direction: row;
         .fa {
             cursor: pointer;
             margin-left: 1rem;
             margin-right: 1rem;
         }
-        .line-item-desc {
+        .line-item-date-button {
             flex: 1 1 0;
-            
+        }
+        .react-datepicker {
+            position: absolute;
         }
         .line-item-desc-input {
             flex: 1 1 0;
         }
-        .line-item-date {
-            flex: 1 1 0;
+        .line-item-cost-input {
+            flex: 0.2 1 0;
         }
-        .line-item-date-button {
-            flex: 1 1 0;
-        }
-    }
-    .line-item-cost {
-        flex: 0.2 1 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .line-item-cost-input {
-        flex: 0.2 1 0;
     }
 }
