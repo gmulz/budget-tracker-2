@@ -38,6 +38,11 @@ export const editTransaction = createAsyncThunk('editTransaction', async (transa
 export const postRecurringTransaction = createAsyncThunk('postRecurringTransaction', async (transaction: Transaction) => {
     const response = await BudgetAPIService.postRecurringTransaction(transaction);
     return response;
+});
+
+export const deleteTransaction = createAsyncThunk('deleteTransaction', async (transaction: Transaction) => {
+    const response = await BudgetAPIService.deleteTransaction(transaction);
+    return transaction;
 })
 
 export const transactions = createSlice({
@@ -77,6 +82,11 @@ export const transactions = createSlice({
             let transaction = action.payload[0];
             state.transactions.push(transaction);
         })
+        .addCase(deleteTransaction.fulfilled, (state, action) => {
+            let transaction = action.payload;
+            let txnIndex = state.transactions.findIndex(txn => txn.id == transaction.id);
+            state.transactions.splice(txnIndex, 1);
+        });
     }
 })
 

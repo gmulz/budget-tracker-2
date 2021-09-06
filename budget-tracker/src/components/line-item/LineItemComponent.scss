@@ -15,13 +15,14 @@
     .line-item-left {
         display: flex;
         flex: 1 1 0;
+        .fa {
+            cursor: pointer;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
         .line-item-desc {
             flex: 1 1 0;
-            .fa {
-                margin-left: 1rem;
-                cursor: pointer;
-                
-            }
+            
         }
         .line-item-desc-input {
             flex: 1 1 0;

@@ -134,7 +134,9 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
     }
 
     render() {
-        let lineItems = this.props.transactions.map((lineItem, idx) => {
+        let lineItems = this.props.transactions
+            .sort((a, b) => b.date.getTime() - a.date.getTime())
+            .map((lineItem, idx) => {
             return <LineItemComponent category={this.props.category} lineItem={lineItem} key={idx} idx={idx} />
         });
         return (

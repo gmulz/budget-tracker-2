@@ -5,7 +5,7 @@ import Transaction from '../../model/LineItem';
 import DatePicker from 'react-datepicker';
 import './LineItemComponent.scss';
 import { connect } from 'react-redux';
-import { editTransaction } from '../../slices/transactionsSlice';
+import { editTransaction, deleteTransaction } from '../../slices/transactionsSlice';
 import Category from '../../model/Category';
 
 
@@ -13,7 +13,8 @@ interface LineItemProps {
     lineItem: Transaction,
     category: Category,
     idx: number,
-    editTransaction: (txn: Transaction) => Promise<any>
+    editTransaction: (txn: Transaction) => Promise<any>,
+    deleteTransaction: (txn: Transaction) => Promise<any>
 }
 
 interface LineItemState {
@@ -55,6 +56,11 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
 
     editButtonClick(e) {
         this.makeEditable();
+    }
+
+    deleteButtonClick(e) {
+        this.props.deleteTransaction(this.props.lineItem);
+        this.setState({editing: false, showDatePicker: false});
     }
 
     makeEditable() {
@@ -106,6 +112,8 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
                  onMouseLeave={this.handleMouseLeave.bind(this)}
                  ref={(node => { this.node = node})}>
                 <div className='line-item-left'>
+                    <span className={`fa fa-trash ${this.state.editing ? '' : 'hide'}`}
+                            onClick={this.deleteButtonClick.bind(this)}></span>
                     <span className={`line-item-desc ${this.displayFieldClass()}`}>
                         {this.props.lineItem.description}
                         <span className={`fa fa-edit ${this.state.hovering ? '' : 'hide'}`} 
@@ -135,4 +143,4 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
     }
 }
 
-export default connect(null, { editTransaction })(LineItemComponent);
+export default connect(null, { editTransaction, deleteTransaction })(LineItemComponent);
