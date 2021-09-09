@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'budgets.apps.BudgetsConfig',
     'rest_framework',
     'corsheaders',
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -110,6 +111,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+CRONJOBS = [
+    ('5 0 1 * *', 'budgets.cron.create_recurring_transactions')
 ]
 
 
