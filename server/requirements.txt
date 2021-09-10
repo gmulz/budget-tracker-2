@@ -1,2 +1,4 @@
+django_crontab==0.7.1
+django_cors_headers==3.8.0
 Django==3.2.6
 djangorestframework==3.12.4
