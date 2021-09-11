@@ -81,11 +81,11 @@ class DataSelectors extends React.Component<DataSelectorProps, DataSelectorsStat
             <div id='data-selectors'>
                 <form onSubmit={this.handleSubmit} >
                     Showing expenses for user: 
-                    <select value={this.props.selectedUser.id} onChange={this.onChangeUser.bind(this)}>
+                    {this.props.selectedUser != undefined && <select value={this.props.selectedUser.id} onChange={this.onChangeUser.bind(this)}>
                         { this.props.users.map((user) => {
                             return <option value={user.id} key={user.id}>{user.name}</option>
                         })}
-                    </select>
+                    </select>}
                      for date range:
                     <DatePicker onChange={this.onChangeDate.bind(this)}
                         selectsRange
