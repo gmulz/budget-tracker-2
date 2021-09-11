@@ -118,7 +118,8 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
 
     deleteButtonClick() {
         this.props.deleteCategory(this.props.category);
-        this.makeUnEditable();
+        document.removeEventListener('click', this.outsideClickHandler, false);
+        this.setState({ editing: false, categoryEditName: ''});
     }
 
     async postNewTransaction() {
