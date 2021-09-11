@@ -1,1 +1,1 @@
-export const apiURL = "http://localhost:8000/budgets"
+export const apiURL = `${location.protocol}//${location.hostname}:8000`
