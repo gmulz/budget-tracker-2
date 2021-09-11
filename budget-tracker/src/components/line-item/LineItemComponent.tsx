@@ -62,6 +62,7 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
 
     deleteButtonClick(e) {
         this.props.deleteTransaction(this.props.lineItem);
+        document.removeEventListener('click', this.outsideClickHandler, false);
         this.setState({editing: false, showDatePicker: false});
     }
 
