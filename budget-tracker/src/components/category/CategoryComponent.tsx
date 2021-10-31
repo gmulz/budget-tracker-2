@@ -12,6 +12,7 @@ import { RootState } from '../../redux/store';
 import BudgetAPIService from '../../services/apiService';
 import './CategoryComponent.scss';
 import { getMonthStartEndFromDate } from '../../utils/DateUtils';
+import { formatPrice } from '../../utils/PriceFormatUtils';
 
 interface CategoryProps {
     category: Category,
@@ -223,7 +224,7 @@ class CategoryComponent extends React.Component<CategoryProps, CategoryState> {
                         </div>
                     </div>
                     <div className='category-header-right'>
-                        <span className='category-total'>${this.props.transactions.reduce((acc, curr) => acc + curr.cost , 0)}</span>
+                        <span className='category-total'>${formatPrice(this.props.transactions.reduce((acc, curr) => acc + curr.cost , 0))}</span>
 
                     </div>
                 </div>

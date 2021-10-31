@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { editTransaction, deleteTransaction } from '../../slices/transactionsSlice';
 import Category from '../../model/Category';
 import { RootState } from '../../redux/store';
+import { formatPrice } from '../../utils/PriceFormatUtils';
 
 
 interface LineItemProps {
@@ -139,7 +140,7 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
                         }</span>
                         
                     </div>
-                    <span className={`line-item-cost ${this.displayFieldClass()}`}>${this.props.lineItem.cost}</span>
+                    <span className={`line-item-cost ${this.displayFieldClass()}`}>${formatPrice(this.props.lineItem.cost)}</span>
 
                 </div>
                 <div className={`line-item-editor ${this.state.editing ? '' : 'hide'}`}>

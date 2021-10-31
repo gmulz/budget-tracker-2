@@ -6,6 +6,7 @@ import Transaction from '../model/LineItem';
 import { RootState } from '../redux/store';
 import { postUser } from '../slices/userSlice';
 import User from '../model/User';
+import { formatPrice } from '../utils/PriceFormatUtils';
 
 interface TopPanelProps {
     transactions: Transaction[],
@@ -57,7 +58,7 @@ class TopPanel extends React.Component<TopPanelProps, TopPanelState>{
             <div id='top-panel'>
                 <DataSelector />
                 <div id='grand-total'>
-                    Grand Total ${this.props.transactions.reduce((acc, curr) => acc + curr.cost, 0)}
+                    Grand Total ${formatPrice(this.props.transactions.reduce((acc, curr) => acc + curr.cost, 0))}
                 </div>
                 <div id='new-user-creator'>
                     <div>
