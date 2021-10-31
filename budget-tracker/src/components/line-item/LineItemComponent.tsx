@@ -57,6 +57,13 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
         }
     }
 
+    handleEnterPress(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            this.makeUnEditable();
+        }
+    }
+
     editButtonClick(e) {
         this.makeEditable();
     }
@@ -143,7 +150,7 @@ class LineItemComponent extends React.Component<LineItemProps, LineItemState> {
                     <span className={`line-item-cost ${this.displayFieldClass()}`}>${formatPrice(this.props.lineItem.cost)}</span>
 
                 </div>
-                <div className={`line-item-editor ${this.state.editing ? '' : 'hide'}`}>
+                <div className={`line-item-editor ${this.state.editing ? '' : 'hide'}`} onKeyPress={this.handleEnterPress.bind(this)}>
                     <span className={`fa fa-trash ${this.state.editing ? '' : 'hide'}`}
                                     onClick={this.deleteButtonClick.bind(this)}></span>
                     <input className={`line-item-desc-input ${this.editableFieldClass()}`}
