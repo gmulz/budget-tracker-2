@@ -1,1 +1,1 @@
-export const apiURL = `${window.location.protocol}//${window.location.hostname}:8000/budgets`
+export const apiURL = 'http://raspberrypi.local:8000/budgets'; //`${window.location.protocol}//${window.location.hostname}:8000/budgets`
